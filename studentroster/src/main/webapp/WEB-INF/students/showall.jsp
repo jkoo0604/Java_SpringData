@@ -26,20 +26,23 @@
 				      <th scope="col">Age</th>
 				      <th scope="col">Address</th>
 				      <th scope="col">Dorm</th>
+				      <th scope="col"># Classes Enrolled</th>
 				    </tr>
 				  </thead>
 				  <tbody>
 				  	<c:forEach items="${students}" var="student">
 				    <tr>
-				      <th scope="row"><c:out value="${student.firstName} ${student.lastName}"/></th>
+				      <th scope="row"><a href="/students/${student.id}"><c:out value="${student.firstName} ${student.lastName}"/></a></th>
 				      <td><c:out value="${student.age}"/></td>
 				      <td><c:out value="${student.contact.address}, ${student.contact.city}, ${student.contact.state}"/></td>
 				      <td><a href="/dorms/${student.dorm.id}"><c:out value="${student.dorm.name}"/></a></td>
+				      <td><c:out value="${fn:length(student.classes)}"/></td>
 				    </tr>
 				    </c:forEach>
 				  </tbody>
 			</table>
 		</div>
+		<div class="row padding"></div>
 		<div class="row">
 			<h3>All Dorms</h3>
 		</div>
@@ -62,15 +65,42 @@
 				  </tbody>
 			</table>
 		</div>
+		<div class="row padding"></div>
 		<div class="row">
-			<div class="col-sm-4 text-center">
+			<h3>All Classes</h3>
+		</div>
+		<div class="row">
+		
+			<table class="table table-striped">
+				<thead class="thead-dark">
+				    <tr>
+				      <th scope="col">Name</th>
+				      <th scope="col"># of Students</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				  	<c:forEach items="${classes}" var="c">
+				    <tr>
+				      <th scope="row"><a href="/classes/${c.id}"><c:out value="${c.name}"/></a></th>
+				      <td><c:out value="${fn:length(c.students)}"/></td>
+				    </tr>
+				    </c:forEach>
+				  </tbody>
+			</table>
+		</div>
+		<div class="row padding"></div>
+		<div class="row">
+			<div class="col-sm-3 text-center">
 				<a href="/students/new" class="btn btn-dark btn-sm" role="button">Create Student</a>
 			</div>
-			<div class="col-sm-4 text-center">
+			<div class="col-sm-3 text-center">
 				<a href="/contacts/new" class="btn btn-dark btn-sm" role="button">Create Contact</a>
 			</div>
-			<div class="col-sm-4 text-center">
+			<div class="col-sm-3 text-center">
 				<a href="/dorms/new" class="btn btn-dark btn-sm" role="button">Create Dorm</a>
+			</div>
+			<div class="col-sm-3 text-center">
+				<a href="/classes/new" class="btn btn-dark btn-sm" role="button">Create Class</a>
 			</div>
 		</div>
 	</div>

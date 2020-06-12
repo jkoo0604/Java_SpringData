@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jkoo.studentroster.models.Contact;
+import com.jkoo.studentroster.models.Class;
 import com.jkoo.studentroster.models.Dorm;
 import com.jkoo.studentroster.models.Student;
 import com.jkoo.studentroster.services.StudentRosterService;
@@ -30,9 +31,11 @@ public class MainController {
 	public String index(Model model) {
 		List<Student> allStudents = mainService.allStudents();
 		List<Dorm> allDorms = mainService.allDorms();
+		List<Class> allClasses = mainService.allClasses();
 		//System.out.println(allStudents.get(0).contact.getCity());
 		model.addAttribute("students", allStudents);
 		model.addAttribute("dorms", allDorms);
+		model.addAttribute("classes", allClasses);
 		return "/students/showall.jsp";
 	}
 	
@@ -52,6 +55,11 @@ public class MainController {
 	@RequestMapping("/dorms/new")
 	public String newDorm(@ModelAttribute("dorm") Dorm dorm) {
 		return "/dorms/new.jsp";		
+	}
+
+	@RequestMapping("/classes/new")
+	public String newClass(@ModelAttribute("c") Class c) {
+		return "/classes/new.jsp";		
 	}
 	
 	@RequestMapping(value="/students", method=RequestMethod.POST)
@@ -87,6 +95,18 @@ public class MainController {
         } else {
         	
         	Dorm newd = mainService.createDorm(dorm);
+            return "redirect:/students";
+        }
+    }
+	
+	@RequestMapping(value="/classes", method=RequestMethod.POST)
+    public String createClass(@Valid @ModelAttribute("c") Class c, BindingResult result) {
+    		
+        if (result.hasErrors()) {
+            return "/classes/new.jsp";
+        } else {
+        	
+        	Class newc = mainService.createClass(c);
             return "redirect:/students";
         }
     }
@@ -139,5 +159,38 @@ public class MainController {
 		return "redirect:/dorms/" + updateddorm.getId();
 	}
 	
+	@RequestMapping("/classes/{id}")	
+	public String showClass(@PathVariable("id") Long id, Model model) {
+		Class c = mainService.findClass(id);
+		model.addAttribute("c", c);
+		return "/classes/show.jsp";
+	}
+	
+	@RequestMapping("/students/{id}")	
+	public String showStudent(@PathVariable("id") Long id, Model model) {
+		List<Class> addclasses = mainService.allClassesNotStudent(id);
+		Student student = mainService.findStudent(id);
+		model.addAttribute("addclasses", addclasses);
+		model.addAttribute("student", student);
+		return "/students/show.jsp";
+	}
+	
+	@RequestMapping(value="/students/{id}/add", method=RequestMethod.PUT)
+	public String addStudentClass(@PathVariable("id") Long studentID, @RequestParam("classID") Long classID, Model model) {
+		Student student = mainService.addClass(studentID, classID);
+		if (student == null) {
+			return "redirect:/students";
+		}
+		return "redirect:/students/" + student.getId();
+	}
+	
+	@RequestMapping(value="/students/{id}/remove/{id2}", method=RequestMethod.DELETE)
+	public String removeStudentClass(@PathVariable("id") Long studentID, @PathVariable("id2") Long classID, Model model) {
+		Student student = mainService.removeClass(studentID, classID);
+		if (student == null) {
+			return "redirect:/students";
+		}
+		return "redirect:/students/" + student.getId();
+	}
 	
 }

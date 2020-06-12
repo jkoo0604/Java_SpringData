@@ -1,6 +1,7 @@
 package com.jkoo.studentroster.models;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -40,6 +43,13 @@ public class Student {
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="dorm_id")
     private Dorm dorm;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "students_classes", 
+        joinColumns = @JoinColumn(name = "student_id"), 
+        inverseJoinColumns = @JoinColumn(name = "class_id")
+    )
+    private List<Class> classes;
    
     
     public Student() {
@@ -132,6 +142,16 @@ public class Student {
 
 	public void setDorm(Dorm dorm) {
 		this.dorm = dorm;
+	}
+
+	
+	public List<Class> getClasses() {
+		return classes;
+	}
+
+
+	public void setClasses(List<Class> classes) {
+		this.classes = classes;
 	}
 
 

@@ -37,7 +37,7 @@
 							<input type="hidden" name="_method" value="put">
 							<div class="form-group">
 							    <select class="form-control" name="productID">
-							    	<option value="0" label="--- Select ---" selected>
+							    	<option value="0" label="--- Select ---" selected disabled>
 							    	<c:forEach items="${addprods}" var="prod">
 						        	<option value="${prod.id}"><c:out value="${prod.name}"/></option>
 						        	</c:forEach>

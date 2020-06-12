@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.jkoo.studentroster.models.Contact;
 import com.jkoo.studentroster.models.Dorm;
 import com.jkoo.studentroster.models.Student;
+import com.jkoo.studentroster.models.Class;
+import com.jkoo.studentroster.repositories.ClassRepository;
 import com.jkoo.studentroster.repositories.ContactRepository;
 import com.jkoo.studentroster.repositories.DormRepository;
 import com.jkoo.studentroster.repositories.StudentRepository;
@@ -17,12 +19,14 @@ public class StudentRosterService {
 	private final StudentRepository studentRepo;
 	private final ContactRepository contactRepo;
 	private final DormRepository dormRepo;
+	private final ClassRepository classRepo;
 	
-	public StudentRosterService(StudentRepository studentRepo, ContactRepository contactRepo, DormRepository dormRepo) {
+	public StudentRosterService(StudentRepository studentRepo, ContactRepository contactRepo, DormRepository dormRepo, ClassRepository classRepo) {
 
 		this.studentRepo = studentRepo;
 		this.contactRepo = contactRepo;
 		this.dormRepo = dormRepo;
+		this.classRepo = classRepo;
 	}
 	
 	public List<Student> allStudents() {
@@ -43,6 +47,15 @@ public class StudentRosterService {
 	
 	public Contact createContact(Contact b) {
 		return contactRepo.save(b);
+	}
+	
+	public Student findStudent(Long id) {
+		Optional<Student> checkstudent = studentRepo.findById(id);
+		if (checkstudent.isPresent()) {
+			Student student = checkstudent.get();
+			return student;
+		}
+		return null;
 	}
 	
 	public List<Dorm> allDorms() {
@@ -89,5 +102,92 @@ public class StudentRosterService {
 		}
 		return null;		
 	}
-
+	
+	public List<Class> allClasses() {
+		return classRepo.findAll();
+	}
+	
+	public Class createClass(Class c) {
+		return classRepo.save(c);
+	}
+	
+	public Class findClass(Long id) {
+		Optional<Class> checkclass = classRepo.findById(id);
+		if (checkclass.isPresent()) {
+			Class c = checkclass.get();
+			return c;
+		}
+		return null;
+	}
+	
+	public List<Class> allClassesNotStudent(Long studentID) {
+		Optional<Student> checkstudent = studentRepo.findById(studentID);
+		if (checkstudent.isPresent()) {
+			Student student = checkstudent.get();
+			return classRepo.findByStudentsNotContaining(student);
+		}
+		return null;
+	}
+	
+	public List<Class> allClassesStudent(Long studentID) {
+		Optional<Student> checkstudent = studentRepo.findById(studentID);
+		if (checkstudent.isPresent()) {
+			Student student = checkstudent.get();
+			return classRepo.findByStudentsContaining(student);
+		}
+		return null;
+	}
+	
+	public List<Student> allStudentsClass(Long classID) {
+		Optional<Class> checkclass = classRepo.findById(classID);
+		if (checkclass.isPresent()) {
+			Class c = checkclass.get();
+			return studentRepo.findByClassesContaining(c);
+		}
+		return null;
+	}
+	
+	public Class addStudent(Long classID, Long studentID) {
+		Optional<Class> checkclass = classRepo.findById(classID);
+		Optional<Student> checkstudent = studentRepo.findById(studentID);
+		if (checkclass.isPresent() && checkstudent.isPresent()) {
+			Class c = checkclass.get();
+			Student s = checkstudent.get();
+			c.getStudents().add(s);
+			classRepo.save(c);
+			return c;
+		}
+		return null;
+	}
+	
+	public Student addClass(Long studentID, Long classID) {
+		Optional<Student> checkstudent = studentRepo.findById(studentID);
+		Optional<Class> checkclass = classRepo.findById(classID);
+		if (checkclass.isPresent() && checkstudent.isPresent()) {
+			Student s = checkstudent.get();
+			Class c = checkclass.get();
+			s.getClasses().add(c);
+			studentRepo.save(s);
+			return s;
+		}
+		return null;
+	}
+	
+	public Student removeClass(Long studentID, Long classID) {
+		Optional<Student> checkstudent = studentRepo.findById(studentID);
+		Optional<Class> checkclass = classRepo.findById(classID);
+		if (checkclass.isPresent() && checkstudent.isPresent()) {
+			Student s = checkstudent.get();
+			Class c = checkclass.get();
+			int classindex = s.getClasses().indexOf(c);
+			if (classindex > -1) {				
+				s.getClasses().remove(classindex);
+				studentRepo.save(s);
+				return s;
+			}
+		}
+		return null;
+	}
+	
+	
 }
