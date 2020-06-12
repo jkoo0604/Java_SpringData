@@ -9,7 +9,7 @@
 <meta charset="UTF-8">
 <title>New Contact</title>
 <link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" />
-<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 	<div class="container">
@@ -22,7 +22,7 @@
 			        <form:label path="student">Student:</form:label>
 			        <form:errors path="student"/>
 			        <form:select path="student">
-			        	<c:forEach items="${students}" var="student">
+			        	<c:forEach items="${addstudents}" var="student">
 			        	<form:option value="${student.id}"><c:out value="${student.firstName} ${student.lastName}"/></form:option>
 			        	</c:forEach>
 			        </form:select>
@@ -44,6 +44,11 @@
 			    </p> 
 			    <input type="submit" value="Create" class="btn btn-dark"/>
 			</form:form>
+		</div>
+		<div class="row">
+			<div class="col text-center">			
+				<a href="/students" class="btn btn-dark btn-sm" role="button">Back</a>
+			</div>
 		</div>
 	</div>
 </body>

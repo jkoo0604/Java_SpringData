@@ -1,8 +1,8 @@
-package com.jkoo.studentroster.models;
+package com.jkoo.prodcat.models;
 
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,8 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
@@ -20,38 +20,42 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name="students")
-public class Student {
+@Table(name="products")
+public class Product {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 	@Size(min = 2)
-    private String firstName;
-	@Size(min = 2)
-	private String lastName;
+    private String name;
+	@Size(min = 5)
+	private String description;
 	@NotNull
-	@Min(10)
-	private Integer age;
+	@Min(0)
+	private Double price;
     @Column(updatable=false)
     private Date createdAt;
     private Date updatedAt;
-    @OneToOne(mappedBy="student", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
-    private Contact contact;
-    @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="dorm_id")
-    private Dorm dorm;
-   
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+        name = "categories_products", 
+        joinColumns = @JoinColumn(name = "product_id"), 
+        inverseJoinColumns = @JoinColumn(name = "category_id")
+    )
+    private List<Category> categories;
     
-    public Student() {
+	
+    public Product() {
 	}
     
-   
-	public Student(String firstName, String lastName, Integer age) {
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.age = age;
+    
+	public Product(String name, String description, Double price) {
+		
+		this.name = name;
+		this.description = description;
+		this.price = price;
 	}
 
+	
 
 	public Long getId() {
 		return id;
@@ -63,33 +67,33 @@ public class Student {
 	}
 
 
-	public String getFirstName() {
-		return firstName;
+	public String getName() {
+		return name;
 	}
 
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 
-	public String getLastName() {
-		return lastName;
+	public String getDescription() {
+		return description;
 	}
 
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 
-	public Integer getAge() {
-		return age;
+	public Double getPrice() {
+		return price;
 	}
 
 
-	public void setAge(Integer age) {
-		this.age = age;
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
 
@@ -111,27 +115,15 @@ public class Student {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
-	
-	
 
 
-	public Contact getContact() {
-		return contact;
+	public List<Category> getCategories() {
+		return categories;
 	}
 
 
-	public void setContact(Contact contact) {
-		this.contact = contact;
-	}
-	
-	
-	public Dorm getDorm() {
-		return dorm;
-	}
-
-
-	public void setDorm(Dorm dorm) {
-		this.dorm = dorm;
+	public void setCategories(List<Category> categories) {
+		this.categories = categories;
 	}
 
 

@@ -22,6 +22,7 @@
 			        <form:label path="dojo">Dojo:</form:label>
 			        <form:errors path="dojo"/>
 			        <form:select path="dojo">
+			        	<form:option value="0" label="--- Select ---"/>
 			        	<c:forEach items="${dojos}" var="dojo">
 			        	<form:option value="${dojo.id}"><c:out value="${dojo.name}"/></form:option>
 			        	</c:forEach>

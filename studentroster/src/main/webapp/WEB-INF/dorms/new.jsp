@@ -7,32 +7,23 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>New Dorm</title>
 <link href="/webjars/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet" />
 <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 	<div class="container">
 		<div class="row">
-			<h3>New Student</h3>
+			<h3>New Dorm</h3>
 		</div>
 		<div class="row">
-			<form:form action="/students" method="post" modelAttribute="student">
+			<form:form action="/dorms" method="post" modelAttribute="dorm">
+			    
 			    <p>
-			        <form:label path="firstName">First Name:</form:label>
-			        <form:errors path="firstName"/>
-			        <form:input path="firstName"/>
-			    </p>
-			    <p>
-			        <form:label path="lastName">Last Name:</form:label>
-			        <form:errors path="lastName"/>
-			        <form:input path="lastName"/>
-			    </p>  
-			    <p>
-			        <form:label path="age">Age:</form:label>
-			        <form:errors path="age"/>
-			        <form:input path="age" type="number"/>
-			    </p>  
+			        <form:label path="name">Name:</form:label>
+			        <form:errors path="name"/>
+			        <form:input path="name"/>
+			    </p> 
 			    <input type="submit" value="Create" class="btn btn-dark"/>
 			</form:form>
 		</div>

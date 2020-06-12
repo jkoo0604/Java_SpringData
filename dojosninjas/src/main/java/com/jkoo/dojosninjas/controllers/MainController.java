@@ -43,6 +43,7 @@ public class MainController {
 		model.addAttribute("dojos", alldojos);
 		return "/ninjas/newninja.jsp";
 	}
+
 	
 	@RequestMapping(value="/dojos", method=RequestMethod.POST)
 	public String createDojo(@Valid @ModelAttribute("dojo") Dojo dojo, BindingResult result) {
@@ -57,6 +58,11 @@ public class MainController {
 	@RequestMapping(value="/ninjas", method=RequestMethod.POST)
 	public String createNinja(@Valid @ModelAttribute("ninja") Ninja ninja, BindingResult result, Model model) {
 		if (result.hasErrors()) {
+			List<Dojo> alldojos = mainService.allDojos();
+			model.addAttribute("dojos", alldojos);
+			return "/ninjas/newninja.jsp";
+		}
+		if (ninja.getDojo() == null) {
 			List<Dojo> alldojos = mainService.allDojos();
 			model.addAttribute("dojos", alldojos);
 			return "/ninjas/newninja.jsp";

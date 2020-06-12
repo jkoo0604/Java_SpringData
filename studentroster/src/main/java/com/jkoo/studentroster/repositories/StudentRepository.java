@@ -10,4 +10,6 @@ import com.jkoo.studentroster.models.Student;
 @Repository
 public interface StudentRepository extends CrudRepository<Student, Long>{
 	List<Student> findAll();
+	List<Student> findByDormNull();
+	List<Student> findByContactNull();
 }
